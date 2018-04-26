@@ -1,0 +1,19 @@
+template header
+ruleid
+ifcondition
+thencondition
+
+import fk.sp.seldon.msku.MSKU
+
+global com.something.blah.MyGlobal myGlobal
+
+template "tmp1"
+
+rule "@{ruleid}"
+  dialect "mvel"
+  when
+    @{ifcondition}
+  then
+    @{thencondition};
+end
+end template

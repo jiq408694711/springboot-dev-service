@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Suite">
+    <!-- testng运行此文件 -->
+    <test name="test">
+        <classes>
+            <class name="com.chengdu.jiq.springtest.testng.ControllerLayerTest"/>
+            <class name="com.chengdu.jiq.springtest.testng.ServiceLayerTest"/>
+        </classes>
+    </test>
+</suite>

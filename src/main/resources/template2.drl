@@ -1,17 +1,18 @@
 template header
-ruleid
-ifcondition
+ruleId
+ifCondition
 package com.chengdu.jiq.drools1
-import fk.sp.seldon.msku.MSKU
+import java.util.Map;
 import com.chengdu.jiq.model.bo.UserDataModel;
-import com.chengdu.jiq.model.bo.RuleCheckResult;
-global java.util.List awardList
+import com.chengdu.jiq.model.bo.RuleModel
+global java.util.List myGlobalList;
 template "tmp1"
-rule "@{ruleid}"
+rule "drools_@{ruleId}"
     when
-        userData : UserDataModel(@{ifcondition})
+        $userData : UserDataModel(@{ifCondition})
+        $ruleMap : Map()
     then
-        awardList.addAll(awards);
+        myGlobalList.add(((RuleModel)$ruleMap.get("@{ruleId}")));
         System.out.println("规则中打印日志：校验通过!");
 end
 end template

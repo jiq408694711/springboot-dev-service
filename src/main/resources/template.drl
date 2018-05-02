@@ -1,19 +1,17 @@
 template header
-ruleid
-ifcondition
-thencondition
-
-import fk.sp.seldon.msku.MSKU
-
-global com.something.blah.MyGlobal myGlobal
-
-template "tmp1"
-
-rule "@{ruleid}"
+ruleId
+ifCondition
+thenCondition
+package com.chengdu.jiq.drools1
+import com.chengdu.jiq.model.bo.UserDataModel;
+import com.chengdu.jiq.model.bo.RuleCheckResult;
+global java.util.List myGlobalList;
+template "tmp22"
+rule "@{ruleId}"
   dialect "mvel"
   when
-    @{ifcondition}
+    @{ifCondition}
   then
-    @{thencondition};
+    @{thenCondition};
 end
 end template

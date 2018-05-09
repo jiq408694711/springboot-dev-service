@@ -1,11 +1,11 @@
 package com.chengdu.jiq.drools1
-
-import com.chengdu.jiq.service.rules.accumulates.DroolsInitFunction dInit;
+import com.chengdu.jiq.model.bo.UserDataModel;
+import accumulate com.chengdu.jiq.service.rules.accumulates.DroolsInitFunction dInit;
 
 rule "Calculate Variance"
 when
-    accumulate( Test( $s : score ), $v : dInit( $s ) )
+    $total : Number() from accumulate( $data : UserDataModel(), dInit( $data ) )
 then
     // the variance of the test scores is $v
-    System.out.println("规则中打印日志：校验通过!");
+    System.out.println("规则中打印日志：校验通过!" + $total);
 end

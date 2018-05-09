@@ -118,12 +118,15 @@ public class RuleController {
         userDataModel.setName("99425");
         userDataModel.setFirstInvest(true);
         userDataModel.setInvestAmount(new BigDecimal("66666"));
+        userDataModel.getContext().put("investAmount", 666666);
+        userDataModel.getContext().put("firstInvest", true);
 
         KieHelper helper = new KieHelper();
-        helper.addResource(ResourceFactory.newClassPathResource("rules/rule1.drl"), ResourceType.DRL);
+        helper.addResource(ResourceFactory.newClassPathResource("rules/rule3.drl"), ResourceType.DRL);
         KieBase kBase = helper.build();
         KieSession kieSession = kBase.newKieSession();
         kieSession.insert(userDataModel);
+        kieSession.setGlobal("ruleService", ruleService);
         int numberOfRulesFired = kieSession.fireAllRules();
         System.out.println("触发了" + numberOfRulesFired + "条规则.");
         kieSession.dispose();

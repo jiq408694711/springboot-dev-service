@@ -20,19 +20,16 @@ public class DroolsInitFunction implements org.kie.api.runtime.rule.AccumulateFu
 
     public static class AverageData implements Externalizable {
         public int count = 0;
-        public double total = 0;
 
         public AverageData() {
         }
 
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
             count = in.readInt();
-            total = in.readDouble();
         }
 
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeInt(count);
-            out.writeDouble(total);
         }
 
     }
@@ -49,16 +46,13 @@ public class DroolsInitFunction implements org.kie.api.runtime.rule.AccumulateFu
      */
     public void init(AverageData context) {
         context.count = 0;
-        context.total = 0;
     }
 
     /* (non-Javadoc)
      * @see org.kie.api.runtime.rule.AccumulateFunction#accumulates(java.io.Serializable, java.lang.Object)
      */
-    public void accumulate(AverageData context,
-                           Object value) {
+    public void accumulate(AverageData context, Object value) {
         context.count++;
-        context.total += ((Number) value).doubleValue();
     }
 
     /* (non-Javadoc)
@@ -66,14 +60,13 @@ public class DroolsInitFunction implements org.kie.api.runtime.rule.AccumulateFu
      */
     public void reverse(AverageData context, Object value) {
         context.count--;
-        context.total -= ((Number) value).doubleValue();
     }
 
     /* (non-Javadoc)
      * @see org.kie.api.runtime.rule.AccumulateFunction#getResult(java.io.Serializable)
      */
     public Object getResult(AverageData context) {
-        return new Double(context.count == 0 ? 0 : context.total / context.count);
+        return context.count;
     }
 
     /* (non-Javadoc)

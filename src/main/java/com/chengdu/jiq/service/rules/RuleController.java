@@ -115,14 +115,14 @@ public class RuleController {
     @RequestMapping("/rule2")
     public void test2() {
         UserDataModel userDataModel = new UserDataModel();
-        userDataModel.setName("99425");
-        userDataModel.setFirstInvest(true);
-        userDataModel.setInvestAmount(new BigDecimal("66666"));
+//        userDataModel.setName("99425");
+//        userDataModel.setFirstInvest(true);
+//        userDataModel.setInvestAmount(new BigDecimal("66666"));
         userDataModel.getContext().put("investAmount", 666666);
         userDataModel.getContext().put("firstInvest", true);
 
         KieHelper helper = new KieHelper();
-        helper.addResource(ResourceFactory.newClassPathResource("rules/rule3.drl"), ResourceType.DRL);
+        helper.addResource(ResourceFactory.newClassPathResource("rules/rule4.drl"), ResourceType.DRL);
         KieBase kBase = helper.build();
         KieSession kieSession = kBase.newKieSession();
         kieSession.insert(userDataModel);

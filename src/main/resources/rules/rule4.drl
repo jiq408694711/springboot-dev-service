@@ -1,0 +1,15 @@
+package com.chengdu.jiq.drools1
+import com.chengdu.jiq.model.bo.UserDataModel;
+import com.chengdu.jiq.service.rules.RuleService;
+global RuleService ruleService;
+
+rule "Calculate Variance"
+when
+    $data : UserDataModel()
+    UserDataModel(context["investAmount"] > 1000)
+    UserDataModel(context["firstInvest"] == true)
+    UserDataModel(context["totalInvestAmount"] > 3000) from ruleService.initConditionData($data, "investTotalCount")
+then
+    // the variance of the test scores is $v
+    System.out.println("规则中打印日志：校验通过44444444!");
+end

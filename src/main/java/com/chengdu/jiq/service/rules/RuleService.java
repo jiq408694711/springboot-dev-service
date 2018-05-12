@@ -12,9 +12,10 @@ import java.util.List;
 @Service
 public class RuleService {
 
-    public Object initConditionData(UserDataModel userDataModel, String conditionName) {
-        System.out.print("获取条件数据:" + conditionName);
-        return userDataModel.getContext().put("investTotalCount", 100);
+    public UserDataModel initConditionData(UserDataModel userDataModel, String conditionName) {
+        System.out.println("获取条件数据:" + conditionName);
+        userDataModel.getContext().put("totalInvestAmount", 1000000);
+        return userDataModel;
     }
 
 

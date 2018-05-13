@@ -1,8 +1,12 @@
 package com.chengdu.jiq.service.rules;
 
 import com.chengdu.jiq.model.bo.UserDataModel;
+import com.chengdu.jiq.model.bo.InvestMessageModel;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,6 +22,13 @@ public class RuleService {
         return userDataModel;
     }
 
+    public List<InvestMessageModel> selectInvestRecords(UserDataModel userDataModel) {
+        InvestMessageModel i = new InvestMessageModel();
+        i.setActorId("123");
+        i.setInvestAmount(new BigDecimal("3000"));
+        i.setInvestTime(new Date());
+        return Arrays.asList(i);
+    }
 
     public void hello() {
         System.out.println("service called");

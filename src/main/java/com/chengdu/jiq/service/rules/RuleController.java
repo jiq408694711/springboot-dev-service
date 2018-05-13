@@ -1,12 +1,16 @@
 package com.chengdu.jiq.service.rules;
 
 import com.chengdu.jiq.model.bo.AwardModel;
+import com.chengdu.jiq.model.bo.InvestMessageModel;
 import com.chengdu.jiq.model.bo.RuleModel;
 import com.chengdu.jiq.model.bo.UserDataModel;
 import org.drools.template.ObjectDataCompiler;
 import org.kie.api.KieBase;
+import org.kie.api.KieBaseConfiguration;
 import org.kie.api.KieServices;
+import org.kie.api.conf.EventProcessingOption;
 import org.kie.api.io.ResourceType;
+import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.internal.utils.KieHelper;
@@ -115,16 +119,49 @@ public class RuleController {
     @RequestMapping("/rule2")
     public void test2() {
         UserDataModel userDataModel = new UserDataModel();
-//        userDataModel.setName("99425");
-//        userDataModel.setFirstInvest(true);
-//        userDataModel.setInvestAmount(new BigDecimal("66666"));
         userDataModel.getContext().put("investAmount", 666666);
         userDataModel.getContext().put("firstInvest", true);
 
         KieHelper helper = new KieHelper();
-        helper.addResource(ResourceFactory.newClassPathResource("rules/rule4.drl"), ResourceType.DRL);
-        KieBase kBase = helper.build();
+        helper.addResource(ResourceFactory.newClassPathResource("rules/rule5.drl"), ResourceType.DRL);
+
+        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
+        config.setOption( EventProcessingOption.STREAM );
+
+        KieBase kBase = helper.build(config);
         KieSession kieSession = kBase.newKieSession();
+        kieSession.insert(userDataModel);
+
+//        InvestMessageModel i = new InvestMessageModel();
+//        i.setActorId("123");
+//        i.setInvestAmount(new BigDecimal("3000"));
+//        i.setInvestTime(new Date());
+//        kieSession.insert(i);
+        kieSession.setGlobal("ruleService", ruleService);
+        int numberOfRulesFired = kieSession.fireAllRules();
+        System.out.println("触发了" + numberOfRulesFired + "条规则.");
+        kieSession.dispose();
+    }
+
+    @ResponseBody
+    @RequestMapping("/rule3")
+    public void test3() {
+        UserDataModel userDataModel = new UserDataModel();
+        userDataModel.getContext().put("investAmount", 500000);
+        userDataModel.getContext().put("firstInvest", true);
+
+//        KieHelper helper = new KieHelper();
+//        helper.addResource(ResourceFactory.newClassPathResource("rules/rule5.drl"), ResourceType.DRL);
+
+        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
+        config.setOption( EventProcessingOption.STREAM );
+
+        KieContainer kContainer = KieServices.Factory.get().getKieClasspathContainer();
+        KieSession kieSession = kContainer.newKieSession();
+
+
+//        KieBase kBase = helper.build(config);
+//        KieSession kieSession = kBase.newKieSession();
         kieSession.insert(userDataModel);
         kieSession.setGlobal("ruleService", ruleService);
         int numberOfRulesFired = kieSession.fireAllRules();

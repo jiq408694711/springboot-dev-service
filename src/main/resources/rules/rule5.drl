@@ -1,0 +1,19 @@
+package com.chengdu.jiq.drools1
+import com.chengdu.jiq.model.bo.UserDataModel;
+import com.chengdu.jiq.service.rules.RuleService;
+import com.chengdu.jiq.model.bo.InvestMessageModel;
+global RuleService ruleService;
+
+rule "Calculate Variance"
+when
+    $data : UserDataModel()
+    UserDataModel(context["investAmount"] > 1000)
+    UserDataModel(context["firstInvest"] == true)
+    $av:Number(doubleValue > 2000 ) from accumulate(
+            InvestMessageModel($investAmount : investAmount)
+            over window:time(10m) from ruleService.selectInvestRecords($data),
+            average($investAmount))
+then
+    // the variance of the test scores is $v
+    System.out.println("规则中打印日志：校验通过55555555555!"+$av);
+end

@@ -2,6 +2,7 @@ package com.chengdu.jiq.springboottest;
 
 import com.chengdu.jiq.common.utils.JsonConvertor;
 import com.chengdu.jiq.model.vo.CityResponse;
+import com.chengdu.jiq.service.rules.RuleController;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,9 @@ public class ControllerLayerTest {
     @Autowired
     private JsonConvertor jsonConvertor;
 
+    @Autowired
+    private RuleController ruleController;
+
 //    @MockBean
 //    private StorageService storageService;
 
@@ -91,4 +95,10 @@ public class ControllerLayerTest {
 //        this.mvc.perform(get("/files/test.txt")).andExpect(status().isNotFound());
     }
 
+    @Test
+    public void testDrools() {
+        for(int i=0;i<10000;i++) {
+            ruleController.test2();
+        }
+    }
 }

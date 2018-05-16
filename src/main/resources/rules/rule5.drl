@@ -10,8 +10,7 @@ when
     UserDataModel(context["investAmount"] > 1000)
     UserDataModel(context["firstInvest"] == true)
     $av:Number(doubleValue > 2000 ) from accumulate(
-            InvestMessageModel($investAmount : investAmount)
-            over window:time(10m) from ruleService.selectInvestRecords($data),
+            InvestMessageModel($investAmount : investAmount) from ruleService.selectInvestRecords($data),
             average($investAmount))
 then
     // the variance of the test scores is $v

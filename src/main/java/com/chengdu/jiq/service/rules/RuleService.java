@@ -1,10 +1,11 @@
 package com.chengdu.jiq.service.rules;
 
-import com.chengdu.jiq.model.bo.UserDataModel;
 import com.chengdu.jiq.model.bo.InvestMessageModel;
+import com.chengdu.jiq.model.bo.UserDataModel;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -23,11 +24,15 @@ public class RuleService {
     }
 
     public List<InvestMessageModel> selectInvestRecords(UserDataModel userDataModel) {
-        InvestMessageModel i = new InvestMessageModel();
-        i.setActorId("123");
-        i.setInvestAmount(new BigDecimal("3000"));
-        i.setInvestTime(new Date());
-        return Arrays.asList(i);
+        List<InvestMessageModel> list = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            InvestMessageModel model = new InvestMessageModel();
+            model.setActorId("123");
+            model.setInvestAmount(new BigDecimal("3000"));
+            model.setInvestTime(new Date());
+            list.add(model);
+        }
+        return list;
     }
 
     public void hello() {

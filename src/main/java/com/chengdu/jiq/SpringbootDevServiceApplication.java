@@ -36,7 +36,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 //@ComponentScan(basePackageClasses = SpringbootDevServiceApplication.class)
 //SpringBoot中以上三个注解被@SpringBootApplication替代
 
-//@PropertySource({"classpath:/config/condition.properties"})
+//@PropertySource({"classpath:/config/stream.properties"})
 //@Import(FactoryBeanConfig.class)
 //@ImportResource(locations={"classpath:/xml/client.xml"})
 //以上注解引入外部资源

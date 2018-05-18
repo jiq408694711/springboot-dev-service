@@ -7,5 +7,7 @@ public enum ReduceType {
     COUNT,
     SUM,
     AVERAGE,
+    MAX,
+    MIN,
     ;
 }

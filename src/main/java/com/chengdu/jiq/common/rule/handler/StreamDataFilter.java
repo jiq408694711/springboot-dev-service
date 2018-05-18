@@ -1,7 +1,7 @@
 package com.chengdu.jiq.common.rule.handler;
 
 import com.chengdu.jiq.common.rule.handler.initializer.AbstractStreamFilter;
-import com.chengdu.jiq.common.rule.model.Condition;
+import com.chengdu.jiq.common.rule.model.DrCondition;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -19,8 +19,8 @@ public class StreamDataFilter implements InitializingBean {
     private List<AbstractStreamFilter> filters;
     private Map<String, AbstractStreamFilter> filterMap;
 
-    public List<Map<String, Object>> filter(Condition condition) {
-        return filterMap.get(condition.getStreamKey()).filter(condition);
+    public List<Map<String, Object>> filter(Map<String, Object> data, DrCondition condition) {
+        return filterMap.get(condition.getStreamKey()).filter(data, condition);
     }
 
     @Override

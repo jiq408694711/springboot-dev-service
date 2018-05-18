@@ -50,6 +50,7 @@ public class RuleEngineTest {
          */
         Map<String, Object> data = new HashMap<>();
         data.put("investAmount", 50000);
+        data.put("cellPhone", "18190800520");
 
         /**
          * 运行规则

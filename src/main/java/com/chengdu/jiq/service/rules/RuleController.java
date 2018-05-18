@@ -168,4 +168,29 @@ public class RuleController {
         System.out.println("触发了" + numberOfRulesFired + "条规则.");
         kieSession.dispose();
     }
+
+    @ResponseBody
+    @RequestMapping("/rule4")
+    public void test4() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("investAmount", 500000);
+        map.put("firstInvest", true);
+        map.put("totalInvest", 50000);
+        map.put("totalQuit", 300);
+
+        KieHelper helper = new KieHelper();
+        helper.addResource(ResourceFactory.newClassPathResource("rules/rule6.drl"), ResourceType.DRL);
+
+//        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
+//        config.setOption( EventProcessingOption.STREAM );
+
+        KieBase kBase = helper.build();
+        KieSession kieSession = kBase.newKieSession();
+
+        kieSession.insert(map);
+//        kieSession.setGlobal("ruleService", ruleService);
+        int numberOfRulesFired = kieSession.fireAllRules();
+        System.out.println("触发了" + numberOfRulesFired + "条规则.");
+        kieSession.dispose();
+    }
 }

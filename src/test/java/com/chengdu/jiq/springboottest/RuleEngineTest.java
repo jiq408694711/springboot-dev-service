@@ -35,15 +35,6 @@ public class RuleEngineTest {
 
     @Test
     public void testGeneralData() throws Exception {
-        /**
-         * 构造规则
-         */
-        DrRule rule = new DrRule();
-        DrCondition drCondition1 = new DrCondition();
-        drCondition1.setType(ConditionType.GENERAL);
-        drCondition1.setMetaCondition(new MetaCondition("investAmount", false, CompareMethod.GRATER, Arrays.asList(10000)));
-        rule.setConditions(Arrays.asList(drCondition1));
-        rule.setActions(Arrays.asList(new SendAwardAction("award1"), new SendAwardAction("award2")));
 
         /**
          * 准备数据
@@ -51,6 +42,16 @@ public class RuleEngineTest {
         Map<String, Object> data = new HashMap<>();
         data.put("investAmount", 50000);
         data.put("cellPhone", "18190800520");
+        data.put("level", 4);
+
+        /**
+         * 构造规则
+         */
+        DrRule rule = new DrRule();
+        DrCondition drCondition1 = new DrCondition(ConditionType.GENERAL, new MetaCondition("this[\"investAmount\"]", CompareMethod.GRATER, Arrays.asList(10000)));
+        DrCondition drCondition2 = new DrCondition(ConditionType.GENERAL, new MetaCondition("this[\"investAmount\"] * this[\"level\"]", CompareMethod.GRATER, Arrays.asList(30000)));
+        rule.setConditions(Arrays.asList(Arrays.asList(drCondition1, drCondition2)));
+        rule.setActions(Arrays.asList(new SendAwardAction("award1"), new SendAwardAction("award2")));
 
         /**
          * 运行规则

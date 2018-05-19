@@ -26,6 +26,11 @@ public class DrCondition {
     private List<MetaCondition> metaConditions = new ArrayList();
     private ReduceType reduce;
 
+    public DrCondition(ConditionType type, MetaCondition metaCondition) {
+        this.type = type;
+        this.metaCondition = metaCondition;
+    }
+
     public ConditionType getType() {
         return type;
     }

@@ -3,9 +3,9 @@ import java.util.Map;
 
 rule "Calculate Variance"
 when
-    Map(this["investAmount"] * 10 > 1000);
-    Map(this["firstInvest"] == true);
-    Map(this["totalInvest"] - this["totalQuit"] > 200 );
+    Map(this["investAmount"] * 10 > 1000)
+    Map(this["firstInvest"] == true)
+    Map(this["totalInvest"] - this["totalQuit"] > 200 )
 then
     // the variance of the test scores is $v
     System.out.println("规则中打印日志：校验通过66666666!");

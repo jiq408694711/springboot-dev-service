@@ -22,10 +22,11 @@ public class GeneralDataInitialzer implements InitializingBean {
     private Map<String, AbstractDataInitializer> initializerMap;
 
     public Object initialize(Map<String, Object> data, MetaCondition metaCondition) {
-        if (metaCondition.getNeedInitialize()) {
+        Object value = data.get(metaCondition.getDataKey());
+        if (null == value) {
             return initializerMap.get(metaCondition.getDataKey()).initialize(data, metaCondition);
         }
-        return data.get(metaCondition.getDataKey());
+        return null;
     }
 
     @Override

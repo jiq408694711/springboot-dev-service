@@ -9,16 +9,13 @@ import java.util.List;
  */
 public class MetaCondition {
     private String dataKey;
-    private Boolean needInitialize;
     private CompareMethod compareMethod;
     private List<Object> compareValues;
 
     public MetaCondition(String dataKey,
-                         Boolean needInitialize,
                          CompareMethod compareMethod,
                          List<Object> compareValues) {
         this.dataKey = dataKey;
-        this.needInitialize = needInitialize;
         this.compareMethod = compareMethod;
         this.compareValues = compareValues;
     }
@@ -29,14 +26,6 @@ public class MetaCondition {
 
     public void setDataKey(String dataKey) {
         this.dataKey = dataKey;
-    }
-
-    public Boolean getNeedInitialize() {
-        return needInitialize;
-    }
-
-    public void setNeedInitialize(Boolean needInitialize) {
-        this.needInitialize = needInitialize;
     }
 
     public CompareMethod getCompareMethod() {

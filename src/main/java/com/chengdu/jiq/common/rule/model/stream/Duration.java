@@ -11,6 +11,11 @@ public class Duration {
     private Long beginTime;
     private Long endTime;
 
+    public Duration(DurationType type, Integer value) {
+        this.type = type;
+        this.value = value;
+    }
+
     public DurationType getType() {
         return type;
     }

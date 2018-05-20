@@ -5,10 +5,7 @@ import com.chengdu.jiq.model.bo.UserDataModel;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by jiyiqin on 2018/3/30.
@@ -21,6 +18,12 @@ public class RuleService {
         System.out.println("获取条件数据:" + conditionName);
         userDataModel.getContext().put("totalInvestAmount", 1000000);
         return userDataModel;
+    }
+
+    public Map<String, Object> initConditionData2(UserDataModel userDataModel, String conditionName) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("investTotalCount", 100000);
+        return map;
     }
 
     public List<InvestMessageModel> selectInvestRecords(UserDataModel userDataModel) {

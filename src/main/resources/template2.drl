@@ -2,10 +2,16 @@ template header
 ruleId
 ifCondition
 package com.chengdu.jiq.drools1
+dialect "mvel"
 import java.util.Map;
 global java.util.List myGlobalList;
+global com.chengdu.jiq.common.rule.handler.GeneralDataInitializer dataInitializer;
+global com.chengdu.jiq.common.rule.handler.StreamDataFilter dataFilter;
+
 template "tmp1"
 rule "drools_@{ruleId}"
+//    no-loop
+//    lock-on-active
     when
         @{ifCondition}
 //        $ruleMap : Map()

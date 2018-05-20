@@ -1,15 +1,18 @@
 package com.chengdu.jiq.common.rule.model;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by jiyiqin on 2018/5/16.
  */
 public class DrRule {
-    private String id = UUID.randomUUID().toString();
+    private String id;
     private List<List<DrCondition>> conditions;
     private List<DrAction> actions;
+
+    public DrRule(String id) {
+        this.id = id;
+    }
 
     public String getId() {
         return id;

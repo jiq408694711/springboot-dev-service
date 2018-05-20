@@ -150,18 +150,18 @@ public class RuleController {
         userDataModel.getContext().put("investAmount", 500000);
         userDataModel.getContext().put("firstInvest", true);
 
-//        KieHelper helper = new KieHelper();
-//        helper.addResource(ResourceFactory.newClassPathResource("rules/rule5.drl"), ResourceType.DRL);
+        KieHelper helper = new KieHelper();
+        helper.addResource(ResourceFactory.newClassPathResource("rules/rule4.drl"), ResourceType.DRL);
 
-        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
-        config.setOption( EventProcessingOption.STREAM );
+//        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
+//        config.setOption( EventProcessingOption.STREAM );
 
-        KieContainer kContainer = KieServices.Factory.get().getKieClasspathContainer();
-        KieSession kieSession = kContainer.newKieSession();
+//        KieContainer kContainer = KieServices.Factory.get().getKieClasspathContainer();
+//        KieSession kieSession = kContainer.newKieSession();
 
 
-//        KieBase kBase = helper.build(config);
-//        KieSession kieSession = kBase.newKieSession();
+        KieBase kBase = helper.build();
+        KieSession kieSession = kBase.newKieSession();
         kieSession.insert(userDataModel);
         kieSession.setGlobal("ruleService", ruleService);
         int numberOfRulesFired = kieSession.fireAllRules();
@@ -178,8 +178,16 @@ public class RuleController {
         map.put("totalInvest", 50000);
         map.put("totalQuit", 300);
 
+        map.put("userId", 1110011);
+        map.put("actionType", "INVEST");
+        map.put("investAmount", 50000);
+        map.put("investPlan", "33222");
+        map.put("cellPhone", "18190800520");
+        map.put("level", 4);
+        map.put("investCount", 30);
+
         KieHelper helper = new KieHelper();
-        helper.addResource(ResourceFactory.newClassPathResource("rules/rule6.drl"), ResourceType.DRL);
+        helper.addResource(ResourceFactory.newClassPathResource("rules/rule7.drl"), ResourceType.DRL);
 
 //        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
 //        config.setOption( EventProcessingOption.STREAM );

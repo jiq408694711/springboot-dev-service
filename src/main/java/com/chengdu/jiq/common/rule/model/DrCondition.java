@@ -1,8 +1,9 @@
 package com.chengdu.jiq.common.rule.model;
 
-import com.chengdu.jiq.common.rule.model.stream.Duration;
+import com.chengdu.jiq.common.rule.model.enums.CompareMethod;
 import com.chengdu.jiq.common.rule.model.enums.ConditionType;
 import com.chengdu.jiq.common.rule.model.enums.ReduceType;
+import com.chengdu.jiq.common.rule.model.stream.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +26,34 @@ public class DrCondition {
     private Duration duration;
     private List<MetaCondition> metaConditions = new ArrayList();
     private ReduceType reduce;
+    private String reduceKey;
+    private CompareMethod compareMethod;
+    private List<Object> compareValues;
 
-    public DrCondition(ConditionType type, MetaCondition metaCondition) {
-        this.type = type;
-        this.metaCondition = metaCondition;
+    public static DrCondition newGeneralDrCondition(MetaCondition metaCondition) {
+        DrCondition drCondition = new DrCondition();
+        drCondition.setType(ConditionType.GENERAL);
+        drCondition.setMetaCondition(metaCondition);
+        return drCondition;
+    }
+
+    public static DrCondition newStreamDrCondition(String streamKey,
+                                                   Duration duration,
+                                                   List<MetaCondition> metaConditions,
+                                                   ReduceType reduce,
+                                                   String reduceKey,
+                                                   CompareMethod compareMethod,
+                                                   List<Object> compareValues) {
+        DrCondition drCondition = new DrCondition();
+        drCondition.setType(ConditionType.STREAM);
+        drCondition.setStreamKey(streamKey);
+        drCondition.setDuration(duration);
+        drCondition.setMetaConditions(metaConditions);
+        drCondition.setReduce(reduce);
+        drCondition.setReduceKey(reduceKey);
+        drCondition.setCompareMethod(compareMethod);
+        drCondition.setCompareValues(compareValues);
+        return drCondition;
     }
 
     public ConditionType getType() {
@@ -77,5 +102,29 @@ public class DrCondition {
 
     public void setReduce(ReduceType reduce) {
         this.reduce = reduce;
+    }
+
+    public String getReduceKey() {
+        return reduceKey;
+    }
+
+    public void setReduceKey(String reduceKey) {
+        this.reduceKey = reduceKey;
+    }
+
+    public CompareMethod getCompareMethod() {
+        return compareMethod;
+    }
+
+    public void setCompareMethod(CompareMethod compareMethod) {
+        this.compareMethod = compareMethod;
+    }
+
+    public List<Object> getCompareValues() {
+        return compareValues;
+    }
+
+    public void setCompareValues(List<Object> compareValues) {
+        this.compareValues = compareValues;
     }
 }

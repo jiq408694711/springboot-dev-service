@@ -1,0 +1,20 @@
+package com.chengdu.jiq.drools1
+dialect "mvel"
+import java.util.Map;
+global java.util.List myGlobalList;
+global com.chengdu.jiq.common.rule.handler.GeneralDataInitializer dataInitializer;
+
+rule "drools_testRuleId1"
+
+
+    when
+        $data: Map();
+Map(this["actionType"] == "INVEST");
+Map(this["investAmount"] > 10000);
+Map(this["investAmount"] * this["level"] > 30000);
+Map(this["level"] * 5 <= this["investCount"]);
+Map(this["investPlan"] in ("33221","33222","11891"));
+  then
+
+        System.out.println("规则中打印日志：校验通过!0000000000000");
+end

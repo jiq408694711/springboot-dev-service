@@ -3,6 +3,7 @@ import java.util.Map;
 
 rule "Calculate Variance"
 when
+$data:Map()
     Map(this["investAmount"] * 10 > 1000)
     Map(this["firstInvest"] == true)
     Map(this["totalInvest"] - this["totalQuit"] > 200 )

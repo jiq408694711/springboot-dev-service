@@ -8,6 +8,18 @@ public enum CompareMethod {
     GRATER_AND_QUEAL,
     LESS,
     LESS_AND_EQUAL,
-    MEMBERS_OF
+    EQUAL,
+    MATCH,  //(Buffalo)?\\S*Mozzarella
+    NOT_MATCH,
+    CONTAINS,
+    NOT_CONTAINS,
+    MEMBERS_OF,
+    NOT_MEMBERS_OF,
+    IN,
+    NOT_IN,
+    STR_STARTS_WITH,
+    STR_END_WITH,
+    STR_LENGTH,
+    BETWEEN,
     ;
 }

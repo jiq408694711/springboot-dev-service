@@ -16,6 +16,10 @@ public class Duration {
         this.value = value;
     }
 
+    public Duration(DurationType type) {
+        this.type = type;
+    }
+
     public DurationType getType() {
         return type;
     }

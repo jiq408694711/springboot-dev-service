@@ -30,20 +30,20 @@ public class DrCondition {
     private CompareMethod compareMethod;
     private List<Object> compareValues;
 
-    public static DrCondition newGeneralDrCondition(MetaCondition metaCondition) {
+    public static DrCondition newGeneralCondition(MetaCondition metaCondition) {
         DrCondition drCondition = new DrCondition();
         drCondition.setType(ConditionType.GENERAL);
         drCondition.setMetaCondition(metaCondition);
         return drCondition;
     }
 
-    public static DrCondition newStreamDrCondition(String streamKey,
-                                                   Duration duration,
-                                                   List<MetaCondition> metaConditions,
-                                                   ReduceType reduce,
-                                                   String reduceKey,
-                                                   CompareMethod compareMethod,
-                                                   List<Object> compareValues) {
+    public static DrCondition newStreamCondition(String streamKey,
+                                                 Duration duration,
+                                                 List<MetaCondition> metaConditions,
+                                                 ReduceType reduce,
+                                                 String reduceKey,
+                                                 CompareMethod compareMethod,
+                                                 List<Object> compareValues) {
         DrCondition drCondition = new DrCondition();
         drCondition.setType(ConditionType.STREAM);
         drCondition.setStreamKey(streamKey);

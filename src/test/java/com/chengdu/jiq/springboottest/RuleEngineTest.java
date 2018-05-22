@@ -104,6 +104,8 @@ public class RuleEngineTest {
         MetaCondition metaCondition4 = new MetaCondition("${investPlan}", CompareMethod.IN, Arrays.asList("33221", "33222", "11891"));
         DrCondition drCondition17 = StreamCondition.newStreamCondition("STREAM_INVEST", new Duration(DurationType.NATURE_WEEK), Arrays.asList(metaCondition3), ReduceType.FIRST, "${InvestAmount}", CompareMethod.GRATER, 10000);
 
+        //流式条件的或？？？
+
         //设置action
         rule.setConditions(Arrays.asList(Arrays.asList(drCondition1, drCondition2, drCondition3, drCondition5, drCondition6, drCondition7, drCondition8, drCondition9, drCondition10, drCondition11, drCondition12)));
         rule.setActions(Arrays.asList(new SendAwardAction("award1"), new SendAwardAction("award2")));

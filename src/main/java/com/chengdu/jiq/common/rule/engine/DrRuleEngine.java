@@ -5,6 +5,8 @@ import com.chengdu.jiq.common.rule.handler.StreamDataFilter;
 import com.chengdu.jiq.common.rule.model.DrAction;
 import com.chengdu.jiq.common.rule.model.DrCondition;
 import com.chengdu.jiq.common.rule.model.DrRule;
+import com.chengdu.jiq.common.rule.model.condition.BaseCondition;
+import com.chengdu.jiq.common.rule.model.condition.StreamCondition;
 import com.chengdu.jiq.common.rule.model.enums.CompareMethod;
 import com.chengdu.jiq.common.rule.model.enums.ReduceType;
 import org.drools.template.ObjectDataCompiler;
@@ -71,59 +73,47 @@ public class DrRuleEngine {
 
     private String generateCondition(Map<String, Object> data, List<DrCondition> conditions) throws Exception {
         StringBuilder sb = new StringBuilder("$data: Map();\n");
-//        StringBuilder sb = new StringBuilder();
-
         for (DrCondition condition : conditions) {
-            switch (condition.getType()) {
-                case GENERAL:
-                    String v = "registerTime";
-                    String v2 = "realName";
-                    String v3 = "inviteeRegisterCount";
-                    String dataKey = condition.getMetaCondition().getDataKey();
-
-                    //Map(this["investAmount"] * 10 > 1000)
-                    //${value}替换为this["value"]
-//                    if (dataKey.equals("${" + v3 + "} % 2")) {
-//                        sb.append("Number(intValue");
-//                    } else {
-                    sb.append("Map(");
-                    sb.append(parse$Signature(dataKey));
-//                    }
-
-                    //operator and compare-value
-                    sb.append(convert2OperatorAndCompareValue(condition.getMetaCondition().getCompareMethod(), condition.getMetaCondition().getCompareValues()));
-                    sb.append(")");
+            if (condition instanceof BaseCondition) {
+                BaseCondition baseCondition = (BaseCondition) condition;
+                String left = baseCondition.getMetaConditions().get(0).getLeft();
+                sb.append("Map(");
+                sb.append(parse$Signature(left));
+                sb.append(convert2OperatorAndCompareValue(baseCondition.getMetaConditions().get(0).getCompareMethod(), baseCondition.getMetaConditions().get(0).getRights()));
+                sb.append(")");
 
 //                    Pattern p = Pattern.compile("(\\$\\{[^\\]]*\\])");
 //                    Matcher m = p.matcher(dataKey);
 //                    String varName = remove$Signature(m.group(0));
 
-                    if (dataKey.equals("${" + v + "}")) {
-                        sb.append(" from dataInitializer.initialize($data, \"" + v + "\")");
-                    }
-                    if (dataKey.equals("${" + v2 + "}")) {
-                        sb.append(" from dataInitializer.initialize($data, \"" + v2 + "\")");
-                    }
-                    if (dataKey.equals("${" + v3 + "} % 2")) {
-                        sb.append(" from dataInitializer.initialize($data, \"" + v3 + "\")");
-                    }
-                    sb.append(";\n");
-                    break;
-                case STREAM:
-                    if (condition.getReduce().equals(ReduceType.COUNT)) {
-                        sb.append("Number(intValue > 3 ) from accumulate(\n" +
-                                "            Map(this[\"investAmount\"] > 1000) from dataFilter.filter(\"STREAM_INVEST\"),\n" +
-                                "            count(1));\n");
-                    }
-                    if (condition.getReduce().equals(ReduceType.SUM)) {
-                        sb.append("Number(doubleValue > 50000 ) from accumulate(\n" +
-                                "            Map($investAmount:this[\"investAmount\"]) from dataFilter.filter(\"STREAM_INVEST\"),\n" +
-                                "            sum($investAmount));\n");
-                    }
-                    break;
-                default:
-                    break;
+                String v = "registerTime";
+                String v2 = "realName";
+                String v3 = "inviteeRegisterCount";
+                if (left.equals("${" + v + "}")) {
+                    sb.append(" from dataInitializer.initialize($data, \"" + v + "\")");
+                }
+                if (left.equals("${" + v2 + "}")) {
+                    sb.append(" from dataInitializer.initialize($data, \"" + v2 + "\")");
+                }
+                if (left.equals("${" + v3 + "} % 2")) {
+                    sb.append(" from dataInitializer.initialize($data, \"" + v3 + "\")");
+                }
+                sb.append(";\n");
+            } else if (condition instanceof StreamCondition) {
+                if (((StreamCondition) condition).getReduceOp().equals(ReduceType.COUNT)) {
+                    sb.append("Number(intValue > 3 ) from accumulate(\n" +
+                            "            Map(this[\"investAmount\"] > 1000) from dataFilter.filter(\"STREAM_INVEST\"),\n" +
+                            "            count(1));\n");
+                }
+                if (((StreamCondition) condition).getReduceOp().equals(ReduceType.SUM)) {
+                    sb.append("Number(doubleValue > 50000 ) from accumulate(\n" +
+                            "            Map($investAmount:this[\"investAmount\"]) from dataFilter.filter(\"STREAM_INVEST\"),\n" +
+                            "            sum($investAmount));\n");
+                }
+            } else {
+                throw new Exception("不识别的条件类型");
             }
+
         }
         return sb.toString();
     }

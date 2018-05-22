@@ -9,8 +9,8 @@ when
     $data : Map();
 //    UserDataModel(context["investAmount"] > 1000);
 //    UserDataModel(context["firstInvest"] == true);
-    Map(this["investTotalCount"] > 1000 || this["investAmount"] > 1000) from ruleService.initConditionData2($data, "investTotalCount", "investAmount");
+    $data2 : Map(this["investTotalCount"] > 1000 || this["investAmount"] > 1000) from ruleService.initConditionData2($data, "investTotalCount", "investAmount");
 then
     // the variance of the test scores is $v
-    System.out.println("规则中打印日志：校验通过44444444!");
+    System.out.println("规则中打印日志：校验通过44444444!" + $data + "," + $data2);
 end

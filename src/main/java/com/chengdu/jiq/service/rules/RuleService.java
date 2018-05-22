@@ -22,6 +22,7 @@ public class RuleService {
 
     public Map<String, Object> initConditionData2(Map<String, Object> data, String... conditionNames) {
         Map<String, Object> map = new HashMap<>();
+        System.out.println("ruleService:" + data);
         data.put("investTotalCount", 5000);
         data.put("investAmount", 4000);
         return data;

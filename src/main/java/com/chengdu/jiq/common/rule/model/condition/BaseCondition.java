@@ -2,6 +2,7 @@ package com.chengdu.jiq.common.rule.model.condition;
 
 import com.chengdu.jiq.common.rule.model.DrCondition;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -10,9 +11,15 @@ import java.util.List;
 public class BaseCondition extends DrCondition {
     private List<MetaCondition> metaConditions;
 
-    public static BaseCondition newGeneralCondition(List<MetaCondition> metaConditions) {
+//    public static BaseCondition newBaseCondition(List<MetaCondition> metaConditions) {
+//        BaseCondition drCondition = new BaseCondition();
+//        drCondition.setMetaConditions(metaConditions);
+//        return drCondition;
+//    }
+
+    public static BaseCondition newBaseCondition(MetaCondition... metaConditions) {
         BaseCondition drCondition = new BaseCondition();
-        drCondition.setMetaConditions(metaConditions);
+        drCondition.setMetaConditions(Arrays.asList(metaConditions));
         return drCondition;
     }
 

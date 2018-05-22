@@ -5,7 +5,6 @@ import com.chengdu.jiq.common.rule.model.enums.CompareMethod;
 import com.chengdu.jiq.common.rule.model.enums.ReduceType;
 import com.chengdu.jiq.common.rule.model.stream.Duration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,11 +14,11 @@ import java.util.List;
 public class StreamCondition extends DrCondition {
     private String streamKey;
     private Duration duration;
-    private List<MetaCondition> metaConditions = new ArrayList();
+    private List<MetaCondition> metaConditions;
     private ReduceType reduceOp;
     private String reduceKey;
     private CompareMethod compareMethod;
-    private List<Object> compareValues;
+    private Object compareValue;
 
     public static StreamCondition newStreamCondition(String streamKey,
                                                      Duration duration,
@@ -27,7 +26,7 @@ public class StreamCondition extends DrCondition {
                                                      ReduceType reduceOp,
                                                      String reduceKey,
                                                      CompareMethod compareMethod,
-                                                     List<Object> compareValues) {
+                                                     Object compareValue) {
         StreamCondition drCondition = new StreamCondition();
         drCondition.setStreamKey(streamKey);
         drCondition.setDuration(duration);
@@ -35,7 +34,7 @@ public class StreamCondition extends DrCondition {
         drCondition.setReduceOp(reduceOp);
         drCondition.setReduceKey(reduceKey);
         drCondition.setCompareMethod(compareMethod);
-        drCondition.setCompareValues(compareValues);
+        drCondition.setCompareValue(compareValue);
         return drCondition;
     }
 
@@ -87,11 +86,11 @@ public class StreamCondition extends DrCondition {
         this.compareMethod = compareMethod;
     }
 
-    public List<Object> getCompareValues() {
-        return compareValues;
+    public Object getCompareValue() {
+        return compareValue;
     }
 
-    public void setCompareValues(List<Object> compareValues) {
-        this.compareValues = compareValues;
+    public void setCompareValue(Object compareValue) {
+        this.compareValue = compareValue;
     }
 }

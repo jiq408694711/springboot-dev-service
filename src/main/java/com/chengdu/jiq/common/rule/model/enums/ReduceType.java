@@ -9,5 +9,7 @@ public enum ReduceType {
     AVERAGE,
     MAX,
     MIN,
+    FIRST,
+    LAST,
     ;
 }

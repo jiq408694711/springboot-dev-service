@@ -11,6 +11,8 @@ public enum DurationType {
     LAST_HOURS,
     LAST_MINUTES,
     LAST_SECONDS,
+    DURATION_TIME,  //DATE
+
+    AHEAD_LENGTH,   //LIMIT
     LAST_LENGTH,
-    DURATION_TIME,
 }

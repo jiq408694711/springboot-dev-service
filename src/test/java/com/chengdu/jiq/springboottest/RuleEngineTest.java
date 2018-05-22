@@ -61,10 +61,11 @@ public class RuleEngineTest {
          */
         DrRule rule = new DrRule("testRuleId1");
 
-        //基本比较(投资金额大于1000且排除特定的投团范围))
+        //基本比较(手机号181开头的用户、投资金额大于1000且排除特定的投团范围))
         DrCondition drCondition1 = BaseCondition.newBaseCondition(new MetaCondition("${actionType}", CompareMethod.EQUAL, Arrays.asList("INVEST")));
         DrCondition drCondition2 = BaseCondition.newBaseCondition(new MetaCondition("${investAmount}", CompareMethod.GRATER, Arrays.asList(10000)));
         DrCondition drCondition3 = BaseCondition.newBaseCondition(new MetaCondition("${investPlan}", CompareMethod.NOT_IN, Arrays.asList("33221", "33222")));
+        DrCondition drCondition4 = BaseCondition.newBaseCondition(new MetaCondition("${cellPhone}", CompareMethod.STR_STARTS_WITH, Arrays.asList("181")));
 
         //java表达式支持(投资次数)
         DrCondition drCondition5 = BaseCondition.newBaseCondition(new MetaCondition("${investAmount} * ${level}", CompareMethod.GRATER, Arrays.asList(30000)));

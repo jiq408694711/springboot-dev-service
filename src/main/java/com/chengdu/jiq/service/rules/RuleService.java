@@ -20,10 +20,11 @@ public class RuleService {
         return userDataModel;
     }
 
-    public Map<String, Object> initConditionData2(UserDataModel userDataModel, String conditionName) {
+    public Map<String, Object> initConditionData2(Map<String, Object> data, String... conditionNames) {
         Map<String, Object> map = new HashMap<>();
-        map.put("investTotalCount", 100000);
-        return map;
+        data.put("investTotalCount", 5000);
+        data.put("investAmount", 4000);
+        return data;
     }
 
     public List<InvestMessageModel> selectInvestRecords(UserDataModel userDataModel) {

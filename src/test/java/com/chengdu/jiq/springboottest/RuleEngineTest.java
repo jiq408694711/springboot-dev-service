@@ -3,7 +3,7 @@ package com.chengdu.jiq.springboottest;
 import com.chengdu.jiq.common.rule.engine.DrRuleEngine;
 import com.chengdu.jiq.common.rule.model.DrCondition;
 import com.chengdu.jiq.common.rule.model.DrRule;
-import com.chengdu.jiq.common.rule.model.MetaCondition;
+import com.chengdu.jiq.common.rule.model.condition.MetaCondition;
 import com.chengdu.jiq.common.rule.model.enums.CompareMethod;
 import com.chengdu.jiq.common.rule.model.enums.DurationType;
 import com.chengdu.jiq.common.rule.model.enums.ReduceType;
@@ -63,7 +63,7 @@ public class RuleEngineTest {
         DrCondition drCondition3 = DrCondition.newGeneralCondition(new MetaCondition("${investPlan}", CompareMethod.IN, Arrays.asList("33221", "33222", "11891")));
 //        DrCondition drCondition4 = new DrCondition(ConditionType.GENERAL, new MetaCondition("${cellPhone}", CompareMethod.STR_END_WITH, Arrays.asList("520")));
 
-        //表达式支持
+        //java表达式支持
         DrCondition drCondition5 = DrCondition.newGeneralCondition(new MetaCondition("${investAmount} * ${level}", CompareMethod.GRATER, Arrays.asList(30000)));
         DrCondition drCondition6 = DrCondition.newGeneralCondition(new MetaCondition("${level} * 5", CompareMethod.LESS_AND_EQUAL, Arrays.asList("${investCount}")));
 

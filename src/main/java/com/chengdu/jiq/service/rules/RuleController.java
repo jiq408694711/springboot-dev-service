@@ -183,6 +183,9 @@ public class RuleController {
         map.put("investAmount", 3);
         map.put("investPlan", "33222");
         map.put("cellPhone", "18190800520");
+        map.put("realNameTime", new Date());
+        map.put("registerTime", new Date());
+        map.put("age", 20);
         map.put("level", 4);
         map.put("investCount", 30);
 

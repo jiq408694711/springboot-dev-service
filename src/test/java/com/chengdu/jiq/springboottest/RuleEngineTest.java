@@ -11,16 +11,14 @@ import com.chengdu.jiq.common.rule.model.enums.DurationType;
 import com.chengdu.jiq.common.rule.model.enums.ReduceType;
 import com.chengdu.jiq.common.rule.model.stream.Duration;
 import com.chengdu.jiq.service.rules.SendAwardAction;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by jiyiqin on 2017/9/19.
@@ -59,7 +57,7 @@ public class RuleEngineTest {
         /**
          * 构造规则
          */
-        DrRule rule = new DrRule("testRuleId1");
+        DrRule rule = new DrRule("testRule1");
 
         //基本比较(手机号181开头的用户、投资金额大于1000且排除特定的投团范围))
         DrCondition drCondition1 = BaseCondition.newBaseCondition(new MetaCondition("${actionType}", CompareMethod.EQUAL, Arrays.asList("INVEST")));
@@ -67,18 +65,18 @@ public class RuleEngineTest {
         DrCondition drCondition3 = BaseCondition.newBaseCondition(new MetaCondition("${investPlan}", CompareMethod.NOT_IN, Arrays.asList("33221", "33222")));
         DrCondition drCondition4 = BaseCondition.newBaseCondition(new MetaCondition("${cellPhone}", CompareMethod.STR_STARTS_WITH, Arrays.asList("181")));
 
-        //java表达式支持(投资次数)
-        DrCondition drCondition5 = BaseCondition.newBaseCondition(new MetaCondition("${investAmount} * ${level}", CompareMethod.GRATER, Arrays.asList(30000)));
-        DrCondition drCondition6 = BaseCondition.newBaseCondition(new MetaCondition("${level} * 5", CompareMethod.LESS_AND_EQUAL, Arrays.asList("${investCount}")));
+        //任意java表达式支持(投资额为偶数、且投资额大于年龄的30倍和用户等级的100倍中最小的那个值)
+        DrCondition drCondition5 = BaseCondition.newBaseCondition(new MetaCondition("${investAmount} % 2", CompareMethod.EQUAL, Arrays.asList(0)));
+        DrCondition drCondition6 = BaseCondition.newBaseCondition(new MetaCondition("${investAmount}", CompareMethod.GRATER, Arrays.asList("Math.min(${age} * 30, ${level} * 100)")));
 
         //外部数据支持(注册时间在指定范围内、已经完成实名、且在注册后的20天内完成绑卡)
         DrCondition drCondition7 = BaseCondition.newBaseCondition(new MetaCondition("${registerTime}", CompareMethod.BETWEEN, Arrays.asList("2018-01-01 00:00:00", "2018-06-01 00:00:00")));
         DrCondition drCondition8 = BaseCondition.newBaseCondition(new MetaCondition("${registerChannel}", CompareMethod.IN, Arrays.asList("channelA", "channelB")));
-        DrCondition drCondition9 = BaseCondition.newBaseCondition(new MetaCondition("${bindCardTime}", CompareMethod.BETWEEN, Arrays.asList("${registerTime}", "${registerTime}")));
+        DrCondition drCondition9 = BaseCondition.newBaseCondition(new MetaCondition("${bindCardTime}", CompareMethod.LESS_AND_EQUAL, Arrays.asList("DateUtils.addDays(${registerTime}, 20)")));
 
-        //or关系支持(完成实名、或者完成绑卡)
-        MetaCondition metaConditionA = new MetaCondition("${realName}", CompareMethod.EQUAL, Arrays.asList(true));
-        MetaCondition metaConditionB = new MetaCondition("${bindCard}", CompareMethod.EQUAL, Arrays.asList(true));
+        //"或"关系支持(完成实名、或完成绑卡)
+        MetaCondition metaConditionA = new MetaCondition("${hasRealName}", CompareMethod.EQUAL, Arrays.asList(true));
+        MetaCondition metaConditionB = new MetaCondition("${hasBindCard}", CompareMethod.EQUAL, Arrays.asList(true));
         DrCondition drCondition10 = BaseCondition.newBaseCondition(metaConditionA, metaConditionB);
 
         //流式数据支持(用户大于1w的投资的次数大于3次、且总额大于5w)
@@ -86,23 +84,25 @@ public class RuleEngineTest {
         DrCondition drCondition11 = StreamCondition.newStreamCondition("STREAM_INVEST", null, Arrays.asList(metaCondition1), ReduceType.COUNT, null, CompareMethod.GRATER, 3);
         DrCondition drCondition12 = StreamCondition.newStreamCondition("STREAM_INVEST", null, null, ReduceType.SUM, "${InvestAmount}", CompareMethod.GRATER, 50000);
 
-        //带表达式的流式数据支持2(用户邀请的人的投资满足：从指定活动注册进来的、且投资大于1w、且是第奇数次投资)
-//        MetaCondition metaCondition1 = new MetaCondition("${investAmount}", CompareMethod.GRATER, Arrays.asList(10000));
-//        DrCondition drCondition10 = StreamCondition.newStreamCondition("referee_invest_stream", null, Arrays.asList(metaCondition1), ReduceType.COUNT, null, CompareMethod.GRATER, 3);
-//        DrCondition drCondition11 = StreamCondition.newStreamCondition("referee_invest_stream", null, null, ReduceType.SUM, "${InvestAmount}", CompareMethod.GRATER, 50000);
-//        DrCondition drCondition9 = BaseCondition.newBaseCondition(new MetaCondition("${inviteeRegisterCount} % 2", CompareMethod.EQUAL, Arrays.asList(0)));
-
         //带时间限制的流式数据支持(最近7天投资额大于1w的总次数大于3次)
         MetaCondition metaCondition2 = new MetaCondition("${investAmount}", CompareMethod.GRATER, Arrays.asList(10000));
         DrCondition drCondition15 = StreamCondition.newStreamCondition("STREAM_INVEST", new Duration(DurationType.LAST_DAYS, 7), Arrays.asList(metaCondition2), ReduceType.COUNT, null, CompareMethod.GRATER, 3);
 
-        //带时间限制的流式数据支持(首次发生在注册后20天内、且金额大于1w)
-        MetaCondition metaCondition3 = new MetaCondition("${investTime}", CompareMethod.BETWEEN, Arrays.asList("${registerTime}", "${registerTime}"));
-        DrCondition drCondition16 = StreamCondition.newStreamCondition("STREAM_INVEST", new Duration(DurationType.AHEAD_LENGTH, 1), Arrays.asList(metaCondition3), ReduceType.FIRST, "${InvestAmount}", CompareMethod.GRATER, 10000);
+        //带时间限制的流式数据支持(首次投资、发生在注册后20天内、且投资金额大于1w)
+        MetaCondition metaCondition3 = new MetaCondition("${investTime}", CompareMethod.LESS_AND_EQUAL, Arrays.asList("DateUtils.addDays(${registerTime}, 20)"));
+        MetaCondition metaCondition4 = new MetaCondition("${investAmount}", CompareMethod.GRATER, Arrays.asList(10000));
+        DrCondition drCondition16 = StreamCondition.newStreamCondition("STREAM_INVEST", new Duration(DurationType.AHEAD_LENGTH, 1), Arrays.asList(metaCondition3, metaCondition4), ReduceType.COUNT, null, CompareMethod.GRATER, 0);
 
-        //带双重时间限制的流式数据支持(当前自然周投团范围在指定团范围内的首次投资大于1w)
-        MetaCondition metaCondition4 = new MetaCondition("${investPlan}", CompareMethod.IN, Arrays.asList("33221", "33222", "11891"));
-        DrCondition drCondition17 = StreamCondition.newStreamCondition("STREAM_INVEST", new Duration(DurationType.NATURE_WEEK), Arrays.asList(metaCondition3), ReduceType.FIRST, "${InvestAmount}", CompareMethod.GRATER, 10000);
+        //带双重时间限制的流式数据支持(当前自然周内的首次投资、投团范围在指定团范围内、且投资额大于1w)
+        MetaCondition metaCondition5 = new MetaCondition("${investPlan}", CompareMethod.IN, Arrays.asList("33221", "33222", "11891"));
+        MetaCondition metaCondition6 = new MetaCondition("${investAmount}", CompareMethod.GRATER, Arrays.asList(10000));
+        DrCondition drCondition17 = StreamCondition.newStreamCondition("STREAM_INVEST", new Duration(DurationType.NATURE_WEEK_AHEAD_LENGTH, 1), Arrays.asList(metaCondition5, metaCondition6), ReduceType.COUNT, null, CompareMethod.GRATER, 0);
+
+        //带表达式的流式数据支持2(用户邀请的人的投资满足：从指定活动注册进来的、且投资大于1w、且是第奇数次投资)
+        MetaCondition metaCondition1 = new MetaCondition("${investAmount}", CompareMethod.GRATER, Arrays.asList(10000));
+        DrCondition drCondition10 = StreamCondition.newStreamCondition("referee_invest_stream", null, Arrays.asList(metaCondition1), ReduceType.COUNT, null, CompareMethod.GRATER, 3);
+        DrCondition drCondition11 = StreamCondition.newStreamCondition("referee_invest_stream", null, null, ReduceType.SUM, "${InvestAmount}", CompareMethod.GRATER, 50000);
+        DrCondition drCondition9 = BaseCondition.newBaseCondition(new MetaCondition("${inviteeRegisterCount} % 2", CompareMethod.EQUAL, Arrays.asList(0)));
 
         //流式条件的或？？？
 

@@ -2,6 +2,8 @@ package com.chengdu.jiq.drools1
 //import com.chengdu.jiq.model.bo.UserDataModel;
 import com.chengdu.jiq.service.rules.RuleService;
 import java.util.Map;
+import java.lang.Math;
+import org.apache.commons.lang3.time.DateUtils;
 global RuleService ruleService;
 
 rule "Calculate Variance"
@@ -9,6 +11,8 @@ when
     $data : Map();
 //    UserDataModel(context["investAmount"] > 1000);
 //    UserDataModel(context["firstInvest"] == true);
+    Map(this["investAmount"] > Math.min(this["age"] * 30, this["level"] * 100));
+    Map(this["realNameTime"] < DateUtils.addDays(this["registerTime"], 10));
     $data2 : Map(this["investTotalCount"] > 1000 || this["investAmount"] > 1000) from ruleService.initConditionData2($data, "investTotalCount", "investAmount");
 then
     // the variance of the test scores is $v

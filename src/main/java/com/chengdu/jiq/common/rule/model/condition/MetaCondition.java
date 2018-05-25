@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * Created by jiyiqin on 2018/5/16.
+ * 原子条件
  */
 public class MetaCondition {
     private String left;

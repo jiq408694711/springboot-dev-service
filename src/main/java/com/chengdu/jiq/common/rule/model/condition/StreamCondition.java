@@ -1,7 +1,6 @@
 package com.chengdu.jiq.common.rule.model.condition;
 
 import com.chengdu.jiq.common.rule.model.DrCondition;
-import com.chengdu.jiq.common.rule.model.enums.CompareMethod;
 import com.chengdu.jiq.common.rule.model.enums.ReduceType;
 import com.chengdu.jiq.common.rule.model.stream.Duration;
 
@@ -9,88 +8,97 @@ import java.util.List;
 
 /**
  * Created by jiyiqin on 2018/5/22.
- * 流式数据规则
+ * 流式数据条件的数据来自于针对流的操作结果
  */
 public class StreamCondition extends DrCondition {
-    private String streamKey;
-    private Duration duration;
-    private List<MetaCondition> metaConditions;
-    private ReduceType reduceOp;
-    private String reduceKey;
-    private CompareMethod compareMethod;
-    private Object compareValue;
+    //针对流式数据一系列操作，计算出value
+    private Reduce reduce;
+    //针对value的条件判断
+    private MetaCondition condition;
 
-    public static StreamCondition newStreamCondition(String streamKey,
-                                                     Duration duration,
-                                                     List<MetaCondition> metaConditions,
-                                                     ReduceType reduceOp,
-                                                     String reduceKey,
-                                                     CompareMethod compareMethod,
-                                                     Object compareValue) {
+    public static Reduce newReduce(String streamKey, Duration duration, List<MetaCondition> filterConditions, ReduceType reduceOp, String reduceKey) {
+        return new Reduce(streamKey, duration, filterConditions, reduceOp, reduceKey);
+    }
+
+    public static StreamCondition newStreamCondition(Reduce streamDataResult, MetaCondition condition) {
         StreamCondition drCondition = new StreamCondition();
-        drCondition.setStreamKey(streamKey);
-        drCondition.setDuration(duration);
-        drCondition.setMetaConditions(metaConditions);
-        drCondition.setReduceOp(reduceOp);
-        drCondition.setReduceKey(reduceKey);
-        drCondition.setCompareMethod(compareMethod);
-        drCondition.setCompareValue(compareValue);
+        drCondition.setReduce(streamDataResult);
+        drCondition.setCondition(condition);
         return drCondition;
     }
 
-    public String getStreamKey() {
-        return streamKey;
+    public Reduce getReduce() {
+        return reduce;
     }
 
-    public void setStreamKey(String streamKey) {
-        this.streamKey = streamKey;
+    public void setReduce(Reduce reduce) {
+        this.reduce = reduce;
     }
 
-    public Duration getDuration() {
-        return duration;
+    public MetaCondition getCondition() {
+        return condition;
     }
 
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public void setCondition(MetaCondition condition) {
+        this.condition = condition;
     }
 
-    public List<MetaCondition> getMetaConditions() {
-        return metaConditions;
-    }
+    public static class Reduce {
+        /**
+         * stream data result
+         */
+        private String streamKey;
+        private Duration duration;
+        private List<MetaCondition> filterConditions;
+        private ReduceType reduceOp;
+        private String reduceKey;
 
-    public void setMetaConditions(List<MetaCondition> metaConditions) {
-        this.metaConditions = metaConditions;
-    }
+        public Reduce(String streamKey, Duration duration, List<MetaCondition> filterConditions, ReduceType reduceOp, String reduceKey) {
+            this.setStreamKey(streamKey);
+            this.setDuration(duration);
+            this.setFilterConditions(filterConditions);
+            this.setReduceOp(reduceOp);
+            this.setReduceKey(reduceKey);
+        }
 
-    public ReduceType getReduceOp() {
-        return reduceOp;
-    }
+        public String getStreamKey() {
+            return streamKey;
+        }
 
-    public void setReduceOp(ReduceType reduceOp) {
-        this.reduceOp = reduceOp;
-    }
+        public void setStreamKey(String streamKey) {
+            this.streamKey = streamKey;
+        }
 
-    public String getReduceKey() {
-        return reduceKey;
-    }
+        public Duration getDuration() {
+            return duration;
+        }
 
-    public void setReduceKey(String reduceKey) {
-        this.reduceKey = reduceKey;
-    }
+        public void setDuration(Duration duration) {
+            this.duration = duration;
+        }
 
-    public CompareMethod getCompareMethod() {
-        return compareMethod;
-    }
+        public List<MetaCondition> getFilterConditions() {
+            return filterConditions;
+        }
 
-    public void setCompareMethod(CompareMethod compareMethod) {
-        this.compareMethod = compareMethod;
-    }
+        public void setFilterConditions(List<MetaCondition> filterConditions) {
+            this.filterConditions = filterConditions;
+        }
 
-    public Object getCompareValue() {
-        return compareValue;
-    }
+        public ReduceType getReduceOp() {
+            return reduceOp;
+        }
 
-    public void setCompareValue(Object compareValue) {
-        this.compareValue = compareValue;
+        public void setReduceOp(ReduceType reduceOp) {
+            this.reduceOp = reduceOp;
+        }
+
+        public String getReduceKey() {
+            return reduceKey;
+        }
+
+        public void setReduceKey(String reduceKey) {
+            this.reduceKey = reduceKey;
+        }
     }
 }

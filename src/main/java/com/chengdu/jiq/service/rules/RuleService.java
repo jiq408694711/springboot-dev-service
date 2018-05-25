@@ -1,6 +1,5 @@
 package com.chengdu.jiq.service.rules;
 
-import com.chengdu.jiq.model.bo.InvestMessageModel;
 import com.chengdu.jiq.model.bo.UserDataModel;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +27,14 @@ public class RuleService {
         return data;
     }
 
-    public List<InvestMessageModel> selectInvestRecords(UserDataModel userDataModel) {
-        List<InvestMessageModel> list = new ArrayList<>();
+    public List<Map<String, Object>> selectInvestRecords(Map<String, Object> data) {
+        List<Map<String, Object>> list = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            InvestMessageModel model = new InvestMessageModel();
-            model.setActorId("123");
-            model.setInvestAmount(new BigDecimal("3000"));
-            model.setInvestTime(new Date());
-            list.add(model);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("actorId", "123");
+            map.put("investAmount", new BigDecimal("3000.5"));
+            map.put("investTime", new Date());
+            list.add(map);
         }
         return list;
     }

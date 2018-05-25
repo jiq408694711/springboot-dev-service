@@ -7,15 +7,10 @@ import java.util.List;
 
 /**
  * Created by jiyiqin on 2018/5/22.
+ * 基础条件的数据来源于当前传入数据、或外部获取数据
  */
 public class BaseCondition extends DrCondition {
-    private List<MetaCondition> metaConditions;
-
-//    public static BaseCondition newBaseCondition(List<MetaCondition> metaConditions) {
-//        BaseCondition drCondition = new BaseCondition();
-//        drCondition.setMetaConditions(metaConditions);
-//        return drCondition;
-//    }
+    private List<MetaCondition> metaConditions; //或关系的多个原子条件
 
     public static BaseCondition newBaseCondition(MetaCondition... metaConditions) {
         BaseCondition drCondition = new BaseCondition();

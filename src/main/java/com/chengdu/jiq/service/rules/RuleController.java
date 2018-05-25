@@ -190,7 +190,7 @@ public class RuleController {
         map.put("investCount", 30);
 
         KieHelper helper = new KieHelper();
-        helper.addResource(ResourceFactory.newClassPathResource("rules/rule4.drl"), ResourceType.DRL);
+        helper.addResource(ResourceFactory.newClassPathResource("rules/rule5.drl"), ResourceType.DRL);
 
 //        KieBaseConfiguration config = KieServices.Factory.get().newKieBaseConfiguration();
 //        config.setOption( EventProcessingOption.STREAM );

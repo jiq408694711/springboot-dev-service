@@ -9,5 +9,5 @@ public abstract class AbstractDataInitializer {
 
     public abstract String dataKey();
 
-    public abstract Object initialize(Map<String, Object> data);
+    public abstract Object initialize(Map<String, Object> data) throws Exception;
 }

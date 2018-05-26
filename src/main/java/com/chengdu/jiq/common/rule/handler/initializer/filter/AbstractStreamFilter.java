@@ -1,5 +1,6 @@
 package com.chengdu.jiq.common.rule.handler.initializer.filter;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,5 +11,5 @@ public abstract class AbstractStreamFilter {
 
     public abstract String streamKey();
 
-    public abstract List<Map<String, Object>> filter();
+    public abstract List<Map<String, Object>> filter(Map<String, Object> data, Date beginDate, Date endDate, Integer limit);
 }

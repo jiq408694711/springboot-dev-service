@@ -7,14 +7,12 @@ global RuleService ruleService;
 rule "Calculate Variance"
 when
     $data : Map();
-    $av:Number(Math.max(doubleValue, doubleValue * 4) > 7 ) from accumulate(
+    Number(Math.max(doubleValue, doubleValue * 4) > 7 ) from accumulate(
             Map($investAmount : this["investAmount"]) from ruleService.selectInvestRecords($data),
-            count(1));
-
-    $av2:Number(doubleValue in (3000.5, 3000, 1000)) from accumulate(
+            count(1)) or Number(doubleValue in (3000.5, 3000, 1000)) from accumulate(
                 Map($investAmount : this["investAmount"]) from ruleService.selectInvestRecords($data),
-                max($investAmount))
+                max($investAmount));
 then
     // the variance of the test scores is $v
-    System.out.println("规则中打印日志：校验通过55555555555!"+$av);
+    System.out.println("规则中打印日志：校验通过55555555555!");
 end

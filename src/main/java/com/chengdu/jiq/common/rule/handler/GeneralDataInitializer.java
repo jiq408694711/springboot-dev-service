@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,11 +24,18 @@ public class GeneralDataInitializer implements InitializingBean {
     private List<AbstractDataInitializer> initializerList;
     private Map<String, AbstractDataInitializer> initializerMap;
 
-    public Map<String, Object> initialize(Map<String, Object> data, String dataKey) {
-        LOGGER.info("init:{}", dataKey);
-        Map<String, Object> map = new HashMap<>();
-        map.put(dataKey, initializerMap.get(dataKey).initialize(data));
-        return map;
+    public Map<String, Object> initialize(Map<String, Object> data, String... dataKeys) {
+        LOGGER.info("base data init:{}", dataKeys);
+        for (String dataKey : dataKeys) {
+            if (!data.containsKey(dataKey)) {
+                try {
+                    data.put(dataKey, initializerMap.get(dataKey).initialize(data));
+                } catch (Exception e) {
+                    LOGGER.error("base data init {} error :{}", dataKey, e.getMessage());
+                }
+            }
+        }
+        return data;
     }
 
     @Override

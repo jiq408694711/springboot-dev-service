@@ -6,6 +6,7 @@ import com.chengdu.jiq.common.rule.model.DrAction;
 import com.chengdu.jiq.common.rule.model.DrCondition;
 import com.chengdu.jiq.common.rule.model.DrRule;
 import com.chengdu.jiq.common.rule.model.condition.BaseCondition;
+import com.chengdu.jiq.common.rule.model.condition.MetaCondition;
 import com.chengdu.jiq.common.rule.model.condition.StreamCondition;
 import com.chengdu.jiq.common.rule.model.enums.CompareMethod;
 import com.chengdu.jiq.common.rule.model.enums.ReduceType;
@@ -17,7 +18,9 @@ import org.kie.api.runtime.KieSession;
 import org.kie.internal.utils.KieHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -33,6 +36,7 @@ public class DrRuleEngine {
     private StreamDataFilter dataFilter;
 
     public List<DrAction> runRuleEngine(Map<String, Object> data, List<DrRule> rules) throws Exception {
+//        System.setProperty("drools.dateformat", "yyyy-MM-dd");
         KieServices kieServices = KieServices.Factory.get();
         KieHelper helper = new KieHelper();
         ObjectDataCompiler compiler = new ObjectDataCompiler();
@@ -76,40 +80,33 @@ public class DrRuleEngine {
         for (DrCondition condition : conditions) {
             if (condition instanceof BaseCondition) {
                 BaseCondition baseCondition = (BaseCondition) condition;
-                String left = baseCondition.getMetaConditions().get(0).getLeft();
+                MetaCondition metaCondition = baseCondition.getMetaConditions().get(0);
                 sb.append("Map(");
-                sb.append(parse$Signature(left));
-                sb.append(convert2OperatorAndCompareValue(baseCondition.getMetaConditions().get(0).getCompareMethod(), baseCondition.getMetaConditions().get(0).getRights()));
+                sb.append(parse$Signature(metaCondition.getLeft()));
+                sb.append(convert2OperatorAndCompareValue(metaCondition.getCompareMethod(), metaCondition.getRights()));
                 sb.append(")");
 
-//                    Pattern p = Pattern.compile("(\\$\\{[^\\]]*\\])");
-//                    Matcher m = p.matcher(dataKey);
-//                    String varName = remove$Signature(m.group(0));
-
-                String v = "registerTime";
-                String v2 = "realName";
-                String v3 = "inviteeRegisterCount";
-                if (left.equals("${" + v + "}")) {
-                    sb.append(" from dataInitializer.initialize($data, \"" + v + "\")");
-                }
-                if (left.equals("${" + v2 + "}")) {
-                    sb.append(" from dataInitializer.initialize($data, \"" + v2 + "\")");
-                }
-                if (left.equals("${" + v3 + "} % 2")) {
-                    sb.append(" from dataInitializer.initialize($data, \"" + v3 + "\")");
+                List<String> dataKeys = parseDataKeysWithoutData(data, metaCondition.getLeft());
+                if (!CollectionUtils.isEmpty(dataKeys)) {
+                    StringBuilder keys = new StringBuilder();
+                    for (String key : dataKeys) {
+                        keys.append("\"" + key + "\",");
+                    }
+                    sb.append(" from dataInitializer.initialize($data, " + keys.substring(0, keys.length() - 1) + ")");
                 }
                 sb.append(";\n");
             } else if (condition instanceof StreamCondition) {
-                if (((StreamCondition) condition).getReduceOp().equals(ReduceType.COUNT)) {
-                    sb.append("Number(intValue > 3 ) from accumulate(\n" +
-                            "            Map(this[\"investAmount\"] > 1000) from dataFilter.filter(\"STREAM_INVEST\"),\n" +
+                StreamCondition streamCondition = (StreamCondition) condition;
+                if (streamCondition.getReduce().getReduceOp() == ReduceType.COUNT) {
+                    sb.append("Number(doubleValue > " + streamCondition.getCondition().getRights().get(0) + " ) from accumulate(\n" +
+                            "            Map(this[\"investAmount\"] > 1000) from dataFilter.filter($data, \"STREAM_INVEST\",\"LAST_DAYS\",\"7\",null,null),\n" +
                             "            count(1));\n");
                 }
-                if (((StreamCondition) condition).getReduceOp().equals(ReduceType.SUM)) {
-                    sb.append("Number(doubleValue > 50000 ) from accumulate(\n" +
-                            "            Map($investAmount:this[\"investAmount\"]) from dataFilter.filter(\"STREAM_INVEST\"),\n" +
-                            "            sum($investAmount));\n");
-                }
+//                if (((StreamCondition) condition).getReduceOp().equals(ReduceType.SUM)) {
+//                    sb.append("Number(doubleValue > 50000 ) from accumulate(\n" +
+//                            "            Map($investAmount:this[\"investAmount\"]) from dataFilter.filter(\"STREAM_INVEST\"),\n" +
+//                            "            sum($investAmount));\n");
+//                }
             } else {
                 throw new Exception("不识别的条件类型");
             }
@@ -118,6 +115,25 @@ public class DrRuleEngine {
         return sb.toString();
     }
 
+    /**
+     * TODO
+     * 正则表达式解析出所有dataKey
+     *
+     * @param left
+     * @return
+     */
+    private List<String> parseDataKeysWithoutData(Map<String, Object> data, String left) {
+        return Arrays.asList(remove$Signature(left));
+    }
+
+    /**
+     * 生成操作符和右侧表达式
+     *
+     * @param method
+     * @param compareValues
+     * @return
+     * @throws Exception
+     */
     private String convert2OperatorAndCompareValue(CompareMethod method, List<Object> compareValues) throws Exception {
         switch (method) {
             case LESS:
@@ -148,16 +164,34 @@ public class DrRuleEngine {
         }
     }
 
+    /**
+     * 转换${value}为this["value"]
+     *
+     * @param value
+     * @return
+     */
     private String parse$Signature(String value) {
         value = value.replaceAll("\\$\\{", "this[\"");
         return value.replaceAll("}", "\"]");
     }
 
+    /**
+     * 去掉${}
+     *
+     * @param value
+     * @return
+     */
     private String remove$Signature(String value) {
         value = value.replaceAll("\\$\\{", "");
         return value.replaceAll("}", "");
     }
 
+    /**
+     * 解析比较值
+     *
+     * @param compareValue
+     * @return
+     */
     private Object parseCompareValue$Signature(Object compareValue) {
         if (compareValue instanceof String) {
             if (compareValue.toString().contains("${")) {
@@ -165,6 +199,11 @@ public class DrRuleEngine {
             } else {
                 return "\"" + compareValue + "\"";
             }
+        }
+        if (compareValue instanceof Date) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            return "\"" + formatter.format(compareValue) + "\"";
+            return "DateUtils.parseDate(\"" + formatter.format(compareValue) + "\", \"yyyy-MM-dd HH:mm:ss\")";
         }
         return compareValue;
 

@@ -11,6 +11,7 @@ import com.chengdu.jiq.common.rule.model.enums.DurationType;
 import com.chengdu.jiq.common.rule.model.enums.ReduceType;
 import com.chengdu.jiq.common.rule.model.stream.Duration;
 import com.chengdu.jiq.service.rules.SendAwardAction;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -146,6 +147,59 @@ public class RuleEngineTest {
                 Arrays.asList(1, 3, 5, 7)));
 
         return Arrays.asList(drCondition5, drCondition6, drCondition7, drCondition8, drCondition9, drCondition10, drCondition11, drCondition12, drCondition13, drCondition14, drCondition15, drCondition16, drCondition17);
+    }
+
+
+    @Test
+    public void testExternalData() throws Exception {
+        //准备数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("aId", 1110011);
+        data.put("actionType", "INVEST");
+        data.put("investAmount", 50000);
+        data.put("investPlan", "33222");
+        data.put("cellPhone", "18190800520");
+        data.put("level", 4);
+
+        MetaCondition filterCondition31 = new MetaCondition("${investAmount}", CompareMethod.GRATER, Arrays.asList(1000));
+        StreamCondition.Reduce reduce3 = StreamCondition.newReduce("STREAM_INVEST", new Duration(DurationType.LAST_DAYS, 7),
+                Arrays.asList(filterCondition31), ReduceType.COUNT, null);
+        DrCondition drCondition13 = StreamCondition.newStreamCondition(reduce3, new MetaCondition("${reduceValue}", CompareMethod.GRATER,
+                Arrays.asList(3)));
+
+        //设置action
+        DrRule rule = new DrRule("testRule1");
+        rule.setConditions(Arrays.asList(Arrays.asList(drCondition13)));
+        rule.setActions(Arrays.asList(new SendAwardAction("award1"), new SendAwardAction("award2")));
+        //运行规则
+        drRuleEngine.runRuleEngine(data, Arrays.asList(rule));
+    }
+
+    @Test
+    public void testStreamlData() throws Exception {
+        //准备数据
+        Map<String, Object> data = new HashMap<>();
+        data.put("aId", 1110011);
+        data.put("actionType", "INVEST");
+        data.put("investAmount", 50000);
+        data.put("investPlan", "33222");
+        data.put("cellPhone", "18190800520");
+        data.put("level", 4);
+        //(注册时间在指定范围内、已经完成实名、且在注册后的20天内完成绑卡
+        //运行时计算并加载外部数据
+        DrCondition drCondition7 = BaseCondition.newBaseCondition(new MetaCondition("${registerTime}", CompareMethod.BETWEEN,
+                Arrays.asList(DateUtils.parseDate("2018-01-01 00:00:00", "yyyy-MM-dd HH:mm:ss"),
+                        DateUtils.parseDate("2018-06-01 00:00:00", "yyyy-MM-dd HH:mm:ss"))));
+        DrCondition drCondition8 = BaseCondition.newBaseCondition(new MetaCondition("${registerChannel}", CompareMethod.IN,
+                Arrays.asList("channelA", "channelB")));
+        DrCondition drCondition9 = BaseCondition.newBaseCondition(new MetaCondition("${bindCardTime}", CompareMethod.LESS_AND_EQUAL,
+                Arrays.asList("DateUtils.addDays(${registerTime}, 20)")));
+        //设置action
+        DrRule rule = new DrRule("testRule1");
+        rule.setConditions(Arrays.asList(Arrays.asList(drCondition7, drCondition8, drCondition9)));
+        rule.setActions(Arrays.asList(new SendAwardAction("award1"), new SendAwardAction("award2")));
+        //运行规则
+        drRuleEngine.runRuleEngine(data, Arrays.asList(rule));
     }
 
     @Test

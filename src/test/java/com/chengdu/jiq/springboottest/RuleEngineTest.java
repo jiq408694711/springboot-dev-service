@@ -48,12 +48,15 @@ public class RuleEngineTest {
         data.put("investAmount", 50000);
         data.put("investPlan", "33222");
         data.put("cellPhone", "18190800520");
-        data.put("level", 4);
         //构造规则
-        DrCondition d1 = BaseCondition.newBaseCondition(new MetaCondition("${actionType}", CompareMethod.EQUAL, Arrays.asList("INVEST")));
-        DrCondition d2 = BaseCondition.newBaseCondition(new MetaCondition("${investAmount}", CompareMethod.GRATER, Arrays.asList(10000)));
-        DrCondition d3 = BaseCondition.newBaseCondition(new MetaCondition("${investPlan}", CompareMethod.NOT_IN, Arrays.asList("33221", "33222")));
-        DrCondition d4 = BaseCondition.newBaseCondition(new MetaCondition("${cellPhone}", CompareMethod.STR_STARTS_WITH, Arrays.asList("181")));
+        DrCondition d1 = BaseCondition.newBaseCondition(new MetaCondition("${actionType}", CompareMethod.EQUAL,
+                Arrays.asList("INVEST")));
+        DrCondition d2 = BaseCondition.newBaseCondition(new MetaCondition("${investAmount}", CompareMethod.GRATER,
+                Arrays.asList(10000)));
+        DrCondition d3 = BaseCondition.newBaseCondition(new MetaCondition("${investPlan}", CompareMethod.NOT_IN,
+                Arrays.asList("33221", "33222")));
+        DrCondition d4 = BaseCondition.newBaseCondition(new MetaCondition("${cellPhone}", CompareMethod.STR_STARTS_WITH,
+                Arrays.asList("181")));
         //设置action
         DrRule rule = new DrRule("testRule1");
         rule.setConditions(Arrays.asList(Arrays.asList(d1, d2, d3, d4)));

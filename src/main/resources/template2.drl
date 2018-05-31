@@ -5,18 +5,14 @@ package com.chengdu.jiq.drools1
 import java.util.Map;
 import java.lang.Math;
 import org.apache.commons.lang3.time.DateUtils;
-global java.util.List myGlobalList;
-global com.chengdu.jiq.common.rule.handler.GeneralDataInitializer dataInitializer;
-global com.chengdu.jiq.common.rule.handler.StreamDataFilter dataFilter;
+global java.util.Set passRuleSet;
+global com.chengdu.jiq.common.engine.initializer.GeneralDataInitializer dataInitializer;
+global com.chengdu.jiq.common.engine.initializer.StreamDataFilter dataFilter;
 template "tmp1"
 rule "drools_@{ruleId}"
-//    no-loop
-//    lock-on-active
     when
         @{ifCondition}
-//        $ruleMap : Map()
     then
-//        myGlobalList.addAll(((RuleModel)$ruleMap.get("@{ruleId}")));
-        System.out.println("规则中打印日志：校验通过!0000000000000");
+        passRuleSet.add("@{ruleId}");
 end
 end template

@@ -2,7 +2,7 @@ package com.chengdu.jiq.drools1
 
 import com.chengdu.jiq.model.bo.UserDataModel;
 
-rule "first rule"
+rule "first engine"
     when
         address : UserDataModel(investAmount > 1000, firstInvest == true)
     then

@@ -35,49 +35,49 @@ public class DroolsInitFunction implements org.kie.api.runtime.rule.AccumulateFu
     }
 
     /* (non-Javadoc)
-     * @see org.kie.api.runtime.rule.AccumulateFunction#createContext()
+     * @see org.kie.api.runtime.engine.AccumulateFunction#createContext()
      */
     public AverageData createContext() {
         return new AverageData();
     }
 
     /* (non-Javadoc)
-     * @see org.kie.api.runtime.rule.AccumulateFunction#init(java.io.Serializable)
+     * @see org.kie.api.runtime.engine.AccumulateFunction#init(java.io.Serializable)
      */
     public void init(AverageData context) {
         context.count = 0;
     }
 
     /* (non-Javadoc)
-     * @see org.kie.api.runtime.rule.AccumulateFunction#accumulates(java.io.Serializable, java.lang.Object)
+     * @see org.kie.api.runtime.engine.AccumulateFunction#accumulates(java.io.Serializable, java.lang.Object)
      */
     public void accumulate(AverageData context, Object value) {
         context.count++;
     }
 
     /* (non-Javadoc)
-     * @see org.kie.api.runtime.rule.AccumulateFunction#reverse(java.io.Serializable, java.lang.Object)
+     * @see org.kie.api.runtime.engine.AccumulateFunction#reverse(java.io.Serializable, java.lang.Object)
      */
     public void reverse(AverageData context, Object value) {
         context.count--;
     }
 
     /* (non-Javadoc)
-     * @see org.kie.api.runtime.rule.AccumulateFunction#getResult(java.io.Serializable)
+     * @see org.kie.api.runtime.engine.AccumulateFunction#getResult(java.io.Serializable)
      */
     public Object getResult(AverageData context) {
         return context.count;
     }
 
     /* (non-Javadoc)
-     * @see org.kie.api.runtime.rule.AccumulateFunction#supportsReverse()
+     * @see org.kie.api.runtime.engine.AccumulateFunction#supportsReverse()
      */
     public boolean supportsReverse() {
         return true;
     }
 
     /* (non-Javadoc)
-     * @see org.kie.api.runtime.rule.AccumulateFunction#getResultType()
+     * @see org.kie.api.runtime.engine.AccumulateFunction#getResultType()
      */
     public Class<?> getResultType() {
         return Number.class;

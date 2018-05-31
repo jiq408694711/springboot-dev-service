@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  * Created by jiyiqin on 2017/11/23.
- * a filter that filters requests to target “/hello-servlet”,
+ * a stream that filters requests to target “/hello-servlet”,
  * and prepends “filtering “ to the output.
  *
  *  Servlet Filter和Spring Interceptor区别：
@@ -36,7 +36,7 @@ public class HelloFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
-        LOGGER.info("filter be called:{}", servletRequest.getRemoteAddr());
+        LOGGER.info("stream be called:{}", servletRequest.getRemoteAddr());
         servletResponse.getOutputStream().print("this is append content, hello: ");
         filterChain.doFilter(servletRequest, servletResponse);
     }

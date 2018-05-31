@@ -2,7 +2,7 @@ package com.chengdu.jiq.springboottest;
 
 import com.chengdu.jiq.common.utils.JsonConvertor;
 import com.chengdu.jiq.model.vo.CityResponse;
-import com.chengdu.jiq.service.rules.RuleController;
+import com.chengdu.jiq.service.rules.ws.RuleController;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 

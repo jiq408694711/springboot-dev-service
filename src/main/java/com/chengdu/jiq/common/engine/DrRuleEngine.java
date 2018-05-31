@@ -52,14 +52,18 @@ public class DrRuleEngine {
     public void runRuleEngine(Map<String, Object> data, String classPathFile, Map<String, Object> globals) {
         KieHelper helper = new KieHelper();
         helper.addResource(ResourceFactory.newClassPathResource(classPathFile), ResourceType.DRL);
+        //步骤1：构建知识库
         KieBase kBase = helper.build();
+        //步骤2：创建到Drools的会话
         KieSession kieSession = kBase.newKieSession();
+        //插入Facts和全局变量
         kieSession.insert(data);
         if (!CollectionUtils.isEmpty(globals)) {
             for (Map.Entry<String, Object> entry : globals.entrySet()) {
                 kieSession.setGlobal(entry.getKey(), entry.getValue());
             }
         }
+        //运行规则
         int ruleFiredCount = kieSession.fireAllRules();
         LOGGER.info("触发了{}条规则.", ruleFiredCount);
         kieSession.dispose();

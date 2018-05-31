@@ -10,8 +10,8 @@ import com.chengdu.jiq.common.engine.condition.enums.ReduceType;
 import com.chengdu.jiq.common.engine.rule.DrAction;
 import com.chengdu.jiq.common.engine.rule.DrCondition;
 import com.chengdu.jiq.common.engine.rule.DrRule;
-import com.chengdu.jiq.service.rules.service.RuleService;
 import com.chengdu.jiq.service.rules.action.SendAwardAction;
+import com.chengdu.jiq.service.rules.service.RuleService;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,9 +34,6 @@ import java.util.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RuleEngineTest {
-
-    @Autowired
-    private RuleService ruleService;
 
     @Resource
     private DrRuleEngine drRuleEngine;
@@ -314,6 +311,9 @@ public class RuleEngineTest {
 //        drRuleEngine.runRuleEngine(data, Arrays.asList(engine));
     }
 
+    @Autowired
+    private RuleService ruleService;
+    
     @Test
     public void testRuleEngineByDRL() {
         Map<String, Object> map = new HashMap<>();

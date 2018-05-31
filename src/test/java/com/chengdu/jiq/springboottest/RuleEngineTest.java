@@ -313,7 +313,7 @@ public class RuleEngineTest {
 
     @Autowired
     private RuleService ruleService;
-    
+
     @Test
     public void testRuleEngineByDRL() {
         Map<String, Object> map = new HashMap<>();

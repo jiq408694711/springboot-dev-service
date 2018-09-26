@@ -39,7 +39,8 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.40</version>
+			<!--<version>5.1.40</version>-->  <!--java.sql.SQLException: Unable to load authentication plugin 'caching_sha2_password'. -->
+			<version>8.0.11</version>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -253,10 +254,25 @@
 			<version>3.1.0</version>
 		</dependency>
 
+		<!-- test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/io.shardingjdbc/sharding-jdbc-core -->
+		<dependency>
+			<groupId>io.shardingjdbc</groupId>
+			<artifactId>sharding-jdbc-core</artifactId>
+			<version>2.0.3</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
+			<version>1</version>
 		</dependency>
 
 	</dependencies>

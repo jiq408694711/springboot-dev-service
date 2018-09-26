@@ -1,4 +1,4 @@
-package com.chengdu.jiq.springboottest;
+package com.chengdu.jiq.springboottest.ruleengine;
 
 import com.chengdu.jiq.common.engine.DrRuleEngine;
 import com.chengdu.jiq.common.engine.condition.BaseCondition;

@@ -1,7 +1,6 @@
 package com.chengdu.jiq.common.exceptionhandler;
 
 import com.chengdu.jiq.model.bo.exception.GlobalException;
-import com.chengdu.jiq.model.bo.exception.ResponseCode;
 import com.chengdu.jiq.model.bo.exception.ServerException;
 import com.chengdu.jiq.model.bo.exception.StorageFileNotFoundException;
 import com.chengdu.jiq.model.vo.ResponseData;
@@ -21,9 +20,9 @@ import org.springframework.web.bind.annotation.*;
  * 非常简单，不过只有当使用@ExceptionHandler最有用，另外两个用处不大
  */
 @ControllerAdvice(basePackages = "com.chengdu.jiq.service")
-public class PlatformControllerAdvice {
+public class PlatformExceptionHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PlatformControllerAdvice.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlatformExceptionHandler.class);
 
     /**
      * 应用到所有@RequestMapping注解方法，在其执行之前初始化数据绑定器

@@ -1,11 +1,11 @@
 package com.chengdu.jiq;
 
 import com.chengdu.jiq.common.utils.JsonConvertor;
+import com.google.gson.Gson;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -53,5 +53,11 @@ public class SpringbootDevServiceApplication {
     @Bean
     public JsonConvertor jsonConvertor() {
         return new JsonConvertor();
+    }
+
+    @Bean
+    public Gson gsonConvertor() {
+        Gson gson = new Gson();
+        return gson;
     }
 }

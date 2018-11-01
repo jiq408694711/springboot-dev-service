@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -37,5 +38,11 @@ public class OrderTest {
             model.setUserId(1231221L);
             Assert.assertTrue(orderService.insert(model) == 1);
         }
+    }
+
+    @Test
+    public void testSelect() throws Exception {
+        List<OrderModel> list = orderService.getAll();
+        Assert.assertTrue(list.size() > 0);
     }
 }

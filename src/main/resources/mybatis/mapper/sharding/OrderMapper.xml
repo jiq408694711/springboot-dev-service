@@ -14,7 +14,7 @@
     <select id="getAll" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_order
+        FROM t_order order by order_id desc
     </select>
 
     <insert id="insert" parameterType="com.chengdu.jiq.model.bo.OrderModel">

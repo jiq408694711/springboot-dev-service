@@ -20,4 +20,8 @@ public class OrderService {
     public int batchInsert(List<OrderModel> models) {
         return 0;
     }
+
+    public List<OrderModel> getAll() {
+        return orderMapper.getAll();
+    }
 }

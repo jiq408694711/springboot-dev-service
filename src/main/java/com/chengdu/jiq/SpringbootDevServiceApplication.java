@@ -1,6 +1,7 @@
 package com.chengdu.jiq;
 
 import com.chengdu.jiq.common.utils.JsonConvertor;
+import com.chengdu.jiq.service.zk.MyCuratorFrameworkFactory;
 import com.google.gson.Gson;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -59,5 +60,11 @@ public class SpringbootDevServiceApplication {
     public Gson gsonConvertor() {
         Gson gson = new Gson();
         return gson;
+    }
+
+    @Bean(initMethod = "init", destroyMethod = "destroy")
+    public MyCuratorFrameworkFactory curatorFrameworkFactory() {
+        MyCuratorFrameworkFactory factory = new MyCuratorFrameworkFactory("127.0.0.1:2181");
+        return factory;
     }
 }

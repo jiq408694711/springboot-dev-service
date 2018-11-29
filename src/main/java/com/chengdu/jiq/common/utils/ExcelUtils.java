@@ -47,4 +47,39 @@ public class ExcelUtils {
             e.printStackTrace();
         }
     }
+
+    private static final String CSV_COLUMN_SEPARATOR = ",";
+    private static final String CSV_RN = "\r\n";
+
+    public static void writeToCsv(List<String> titles, List<List<String>> datas) throws Exception {
+        StringBuffer buf = new StringBuffer();
+
+        // 输出列头
+        for (int i = 0; i < titles.size(); i++) {
+            buf.append(titles.get(i)).append(CSV_COLUMN_SEPARATOR);
+        }
+        buf.append(CSV_RN);
+
+        // 输出数据
+        if (null != datas) {
+            for (int i = 0; i < datas.size(); i++) {
+                for (int j = 0; j < titles.size(); j++) {
+                    buf.append(datas.get(i).get(j)).append(CSV_COLUMN_SEPARATOR);
+                }
+                buf.append(CSV_RN);
+            }
+        }
+        byte[] data = buf.toString().getBytes("GBK");
+
+        //将文件保存到指定的位置
+        try {
+            FileOutputStream fos = new FileOutputStream("D:\\file.csv");
+            fos.write(data);
+            fos.flush();
+            System.out.println("写入成功");
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -19,4 +19,11 @@
         from city
     </select>
 
+    <select id="listByCountryCode" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from city
+        where CountryCode=#{countryCode}
+    </select>
+
 </mapper>

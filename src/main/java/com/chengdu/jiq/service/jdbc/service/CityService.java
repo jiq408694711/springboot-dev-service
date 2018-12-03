@@ -41,6 +41,10 @@ public class CityService {
         return cityReposiroty.listByMybatis();
     }
 
+    public List<CityModel> listByCountryCode(String countryCode) {
+        return cityReposiroty.listByCountryCode(countryCode);
+    }
+
     /**
      * SqlSessionTemplateInterceptor切SqlSessionTemplate时，检测到update走主库
      * TransactionalInterceptor切DbSwitch时，检测到Transactional注解走主库

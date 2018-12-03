@@ -35,4 +35,10 @@ public class CityTest {
         List<CityModel> list = cityService.listByMybatis();
         Assert.assertTrue(list.size() > 0);
     }
+
+    @Test
+    public void test2() throws Exception {
+        List<CityModel> list = cityService.listByCountryCode("AFG");
+        Assert.assertTrue(list.size() > 0);
+    }
 }
